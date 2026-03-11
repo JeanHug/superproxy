@@ -14,7 +14,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --production
+# LA CORRECTION EST ICI : on utilise npm install au lieu de npm ci
+RUN npm install
 
 COPY . .
 
