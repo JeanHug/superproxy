@@ -935,3 +935,23 @@ app.listen(PORT, function () {
         console.log('   Le mode rapide (/surf/) fonctionne quand même.');
     });
 });
+// ─────────────────────────────────────────────
+// ROUTE : Fetch Scratch (Anti-CORS pour ton HTML)
+// ─────────────────────────────────────────────
+app.get('/scratch-data', async (req, res) => {
+    const projectID = "1290318716";
+    const targetUrl = `https://clouddata.scratch.mit.edu/logs?projectid=${projectID}&limit=10`;
+    
+    try {
+        // Le serveur Render appelle Scratch directement
+        const response = await httpClient.get(targetUrl);
+        
+        // On définit les headers pour autoriser ton site HTML à lire les données
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Content-Type', 'application/json');
+        
+        res.status(200).send(response.data);
+    } catch (e) {
+        res.status(500).json({ error: "Impossible de joindre Scratch", details: e.message });
+    }
+});
